@@ -1,3 +1,9 @@
 <?php
+
+use App\Helpers\Config;
+
 require_once './vendor/autoload.php';
-print "test";
+
+$result = Config::get('database', 'pdo');
+
+var_dump($result);

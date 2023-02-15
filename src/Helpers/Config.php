@@ -2,6 +2,8 @@
 
 namespace App\Helpers;
 
+use App\Exceptions\ConfigFileNotFoundExcpetion;
+
 class Config
 {
     public static function getFileContents(string $filename)

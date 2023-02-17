@@ -4,6 +4,7 @@ namespace Tests\Unit;
 
 use App\Contracts\DatabaseConnectionInterface;
 use App\Database\PDODatabaseConnection;
+use App\Exceptions\ConfigNotValidException;
 use App\Exceptions\DatabaseConnectionException;
 use App\Helpers\Config;
 use PDO;
@@ -25,7 +26,7 @@ class PDODataBaseConnectionTest extends TestCase
         $pdoConnection = new PDODatabaseConnection($config);
 
         $pdoHandler = $pdoConnection->connect();
-        $this->assertInstanceOf(PDODatabaseConnection::Class, $pdoHandler);
+        $this->assertInstanceOf(PDODatabaseConnection::class, $pdoHandler);
         return $pdoHandler;
     }
 
@@ -42,6 +43,16 @@ class PDODataBaseConnectionTest extends TestCase
         $this->expectException(DatabaseConnectionException::class);
         $config = $this->getConfig();
         $config['database'] = 'dummy';
+        $pdoConnection = new PDODatabaseConnection($config);
+        $pdoConnection->connect();
+    }
+
+    public function testReceivedConfigHaveRequiredKey()
+    {
+        $this->expectException(ConfigNotValidException::class);
+        $config = $this->getConfig();
+        unset($config['db_user']);
+
         $pdoConnection = new PDODatabaseConnection($config);
         $pdoConnection->connect();
     }
